@@ -81,6 +81,20 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+st.markdown("""
+<style>
+/* Fix overlapping container blocking clicks */
+div[data-baseweb="input"] {
+    position: relative;
+    z-index: 10;
+}
+
+.stTextInput > div > div > input {
+    z-index: 20 !important;
+    position: relative;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.markdown('<div class="main-title">Student Weekly Report 🇦🇪</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-title">تقرير أسبوعي للطالب</div>', unsafe_allow_html=True)
