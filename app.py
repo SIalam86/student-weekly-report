@@ -196,18 +196,6 @@ if clicked:
             else:
                 row = match.iloc[0]
 
-                # ------ Student info block ------
-                st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
-                st.markdown("### 🎓 Student information")
-
-                col1, col2 = st.columns([2, 1])
-                with col1:
-                    st.write(f"**Name:** {row['Student_Name']}")
-                    st.write(f"**ID:** {row['Student_ID']}")
-                with col2:
-                    st.write(f"**Class:** {row['Class']}")
-                    st.write(f"**Term:** {row['Term']}")
-
                 # ------ Subjects ------
                 st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
                 st.markdown("### 📚 Subjects & teacher notes")
