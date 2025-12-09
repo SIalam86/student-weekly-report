@@ -196,46 +196,6 @@ if clicked:
             else:
                 row = match.iloc[0]
 
-                # ------ Subjects ------
-                st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
-                st.markdown("### 📚 Subjects & teacher notes")
-
-                def subject_block(label, emoji, mcol, ccol):
-                    mark = row.get(mcol, "")
-                    comm = row.get(ccol, "")
-                    st.markdown(
-                        f"<div class='subject-chip'>{emoji} {label}</div>",
-                        unsafe_allow_html=True,
-                    )
-                    st.write(f"**Mark:** {mark}")
-                    st.markdown(
-                        f"<div class='comment-label'>Teacher comment:</div>",
-                        unsafe_allow_html=True,
-                    )
-                    st.write(comm if comm else "*No comment*")
-                    st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
-
-                subject_block("Arabic / العربية", "🕌", "Arabic", "Arabic_Comment")
-                subject_block("English / الإنجليزية", "📖", "English", "English_Comment")
-                subject_block("Math / الرياضيات", "🧮", "Math", "Math_Comment")
-                subject_block("Science / العلوم", "🧪", "Science", "Science_Comment")
-                subject_block("Islamic / التربية الإسلامية", "☪️", "Islamic", "Islamic_Comment")
-                subject_block("Social Studies / الدراسات الاجتماعية", "🌍",
-                               "Social_Studies", "Social_Studies_Comment")
-
-                # ------ Overall comment ------
-                st.markdown("### 💡 Overall teacher comment")
-                st.write(row.get("Overall_Comment", ""))
-
-                # CSV download of that one row
-                csv = match.to_csv(index=False).encode("utf-8")
-                st.download_button(
-                    "⬇️ Download this report (CSV)",
-                    csv,
-                    file_name=f"report_{row['Student_ID']}.csv",
-                    mime="text/csv",
-                )
-
 # ======================================================================
 #                               TEACHER VIEW
 # ======================================================================
