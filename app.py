@@ -120,12 +120,13 @@ if mode == "Parent":
     st.subheader("🔎 Search for your child")
 
     # --- centered icon above the search box ---
-    ic1, ic2, ic3 = st.columns([1, 1, 1])
-    with ic2:
-        st.markdown(
-            "<div style='text-align:center; font-size:40px;'>🔍</div>",
-            unsafe_allow_html=True,
-        )
+ic1, ic2, ic3 = st.columns([1, 1, 1])
+with ic2:
+    st.markdown(
+        "<div style='text-align:center; font-size:45px; margin-bottom:10px;'>🔍</div>",
+        unsafe_allow_html=True,
+    )
+
 
     # --- full-width text box ---
     student_id = st.text_input(
