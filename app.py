@@ -104,7 +104,7 @@ st.markdown(
 
 # Removed “AE” here
 st.markdown('<div class="main-title">Student Weekly Report</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">تقرير أسبوعي ملون للطالب 🇦🇪</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">تقرير أسبوعي ملون للطالب</div>', unsafe_allow_html=True)
 
 # ----------------- Side bar mode switch -----------------
 mode = st.sidebar.radio("Who is using the app?", ["Parent", "Teacher"])
