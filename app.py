@@ -2,6 +2,13 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 
+st.set_page_config(
+    page_title="Student Weekly Report",
+    page_icon="🇦🇪",
+    layout="centered",
+    initial_sidebar_state="expanded"
+)
+
 DATA_FILE = Path("marks.xlsx")
 
 # ---------- Data helpers ----------
