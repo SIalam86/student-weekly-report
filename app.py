@@ -124,7 +124,68 @@ if mode == "Parent":
         placeholder="e.g., 20230045",
     )
 
-    if st.button("🔍 Search / بحث", type="primary"):
+    # ------------ Centered Search Icon + Input + Button ------------
+st.markdown(
+    """
+    <div style="text-align:center; margin-top:10px;">
+        <span style="font-size:45px;">🔍</span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Centering the text input using container width control
+student_id = st.text_input(
+    "",
+    placeholder="Enter Student ID / أدخل رقم الطالب",
+    label_visibility="collapsed",
+)
+
+# Center the Search button
+center_button = """
+<div style="text-align:center; margin-top:15px;">
+    <button style="
+        background-color:#FF5C5C;
+        color:white;
+        border:none;
+        padding:10px 28px;
+        font-size:17px;
+        border-radius:10px;
+        cursor:pointer;">
+        🔍 Search / بحث
+    </button>
+</div>
+"""
+
+# Render the button visually
+btn = st.markdown(center_button, unsafe_allow_html=True)
+
+# Invisible Streamlit button to trigger functionality
+clicked = st.button("Trigger_Search", key="real_button", help="", args=None)
+
+# Make the fancy HTML button trigger the real button using JS
+st.markdown(
+    """
+    <script>
+    const htmlBtn = window.parent.document.querySelector('button[style]');
+    htmlBtn.addEventListener('click', function() {
+        const realBtn = window.parent.document.querySelector('button[kind="secondary"]');
+        realBtn.click();
+    });
+    </script>
+    """,
+    unsafe_allow_html=True
+)
+
+# Process search
+if clicked:
+    sid = student_id.strip()
+    if not sid:
+        st.warning("Please enter a Student ID.")
+    else:
+        match = df[df["Student_ID"].astype(str) == sid]
+        ...
+
         sid = student_id.strip()
         if not sid:
             st.warning("Please enter a Student ID.")
