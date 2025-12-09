@@ -116,14 +116,37 @@ if mode == "Parent":
     st.sidebar.markdown("### 👨‍👩‍👧 Parent view")
     st.sidebar.write("Enter your child’s ID to view the report.")
 
-    st.markdown('<div class="card">', unsafe_allow_html=True)
+    # --- Title section ---
+    st.markdown("### 🔎 Search for your child")
 
-    st.markdown("#### 🔎 Search for your child")
+    # White textbox styling (safe)
+    st.markdown(
+        """
+        <style>
+        .white-input input {
+            background-color: #FFFFFF !important;
+            color: #000000 !important;
+            border: 1px solid #CCC !important;
+            border-radius: 10px !important;
+            padding: 10px !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Text input (with white color)
     student_id = st.text_input(
         "Enter Student ID / أدخل رقم الطالب",
         placeholder="e.g., 20230045",
+        key="parent_search",
+        label_visibility="collapsed"
     )
 
+    # Apply white style class
+    st.markdown("<div class='white-input'></div>", unsafe_allow_html=True)
+
+    # Search button
     if st.button("🔍 Search / بحث", type="primary"):
         sid = student_id.strip()
         if not sid:
@@ -135,18 +158,14 @@ if mode == "Parent":
             else:
                 row = match.iloc[0]
 
-                # ------ Student info block ------
-                st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
                 st.markdown("### 🎓 Student information")
+                st.write(f"**Name:** {row['Student_Name']}")
+                st.write(f"**Class:** {row['Class']}")
+                st.write(f"**ID:** {row['Student_ID']}")
 
-                col1, col2 = st.columns([2, 1])
-                with col1:
-                    st.write(f"**Name:** {row['Student_Name']}")
-                    st.write(f"**ID:** {row['Student_ID']}")
-                with col2:
-                    st.write(f"**Class:** {row['Class']}")
-                    st.write(f"**Term:** {row['Term']}")
-
+                st.markdown("---")
+                st.markdown("### 📚 Subjects & teacher notes")
+                
                 # ------ Subjects ------
                 st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
                 st.markdown("### 📚 Subjects & teacher notes")
