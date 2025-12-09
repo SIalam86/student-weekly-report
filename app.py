@@ -39,7 +39,7 @@ ACCENT = "#CE1126"    # UAE red
 GOLD   = "#F4B400"    # playful gold
 SOFT_BG = "#F8F9FB"
 
-# Safe CSS – only decor, no position/z-index hacks
+# Global, safe CSS (no position/z-index hacks)
 st.markdown(
     f"""
     <style>
@@ -58,14 +58,6 @@ st.markdown(
         text-align:center;
         color:#555;
         margin-bottom:1.2rem;
-    }}
-    .card {{
-        background-color: #FFFFFF;
-        padding: 1.4rem 1.8rem;
-        border-radius: 18px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        border-top: 5px solid {GOLD};
-        margin-bottom: 1.5rem;
     }}
     .subject-chip {{
         display:inline-block;
@@ -87,6 +79,14 @@ st.markdown(
         background:linear-gradient(to right, transparent, #D0D7E2, transparent);
         margin:0.6rem 0 0.8rem 0;
     }}
+    /* Make all text inputs white with rounded corners */
+    .stTextInput > div > div > input {{
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
+        border: 1px solid #CCCCCC !important;
+        border-radius: 10px !important;
+        padding: 8px 10px !important;
+    }}
     </style>
     """,
     unsafe_allow_html=True,
@@ -102,8 +102,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown('<div class="main-title">Student Weekly Report </div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">تقرير أسبوعي ملون للطالب </div>', unsafe_allow_html=True)
+# Removed “AE” here
+st.markdown('<div class="main-title">Student Weekly Report</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">تقرير أسبوعي ملون للطالب 🇦🇪</div>', unsafe_allow_html=True)
 
 # ----------------- Side bar mode switch -----------------
 mode = st.sidebar.radio("Who is using the app?", ["Parent", "Teacher"])
@@ -116,37 +117,13 @@ if mode == "Parent":
     st.sidebar.markdown("### 👨‍👩‍👧 Parent view")
     st.sidebar.write("Enter your child’s ID to view the report.")
 
-    # --- Title section ---
-    st.markdown("### 🔎 Search for your child")
+    st.subheader("🔎 Search for your child")
 
-    # White textbox styling (safe)
-    st.markdown(
-        """
-        <style>
-        .white-input input {
-            background-color: #FFFFFF !important;
-            color: #000000 !important;
-            border: 1px solid #CCC !important;
-            border-radius: 10px !important;
-            padding: 10px !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # Text input (with white color)
     student_id = st.text_input(
         "Enter Student ID / أدخل رقم الطالب",
         placeholder="e.g., 20230045",
-        key="parent_search",
-        label_visibility="collapsed"
     )
 
-    # Apply white style class
-    st.markdown("<div class='white-input'></div>", unsafe_allow_html=True)
-
-    # Search button
     if st.button("🔍 Search / بحث", type="primary"):
         sid = student_id.strip()
         if not sid:
@@ -158,14 +135,18 @@ if mode == "Parent":
             else:
                 row = match.iloc[0]
 
+                # ------ Student info block ------
+                st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
                 st.markdown("### 🎓 Student information")
-                st.write(f"**Name:** {row['Student_Name']}")
-                st.write(f"**Class:** {row['Class']}")
-                st.write(f"**ID:** {row['Student_ID']}")
 
-                st.markdown("---")
-                st.markdown("### 📚 Subjects & teacher notes")
-                
+                col1, col2 = st.columns([2, 1])
+                with col1:
+                    st.write(f"**Name:** {row['Student_Name']}")
+                    st.write(f"**ID:** {row['Student_ID']}")
+                with col2:
+                    st.write(f"**Class:** {row['Class']}")
+                    st.write(f"**Term:** {row['Term']}")
+
                 # ------ Subjects ------
                 st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
                 st.markdown("### 📚 Subjects & teacher notes")
@@ -197,7 +178,7 @@ if mode == "Parent":
                 st.markdown("### 💡 Overall teacher comment")
                 st.write(row.get("Overall_Comment", ""))
 
-                # Small CSV download
+                # CSV download of that one row
                 csv = match.to_csv(index=False).encode("utf-8")
                 st.download_button(
                     "⬇️ Download this report (CSV)",
@@ -206,8 +187,6 @@ if mode == "Parent":
                     mime="text/csv",
                 )
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
 # ======================================================================
 #                               TEACHER VIEW
 # ======================================================================
@@ -215,8 +194,7 @@ else:
     st.sidebar.markdown("### 👩‍🏫 Teacher view")
     st.sidebar.write("Add or update a weekly report.")
 
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.markdown("### ✏️ Teacher entry form")
+    st.subheader("✏️ Teacher entry form")
 
     with st.form("teacher_form", clear_on_submit=False):
         col1, col2 = st.columns(2)
@@ -284,5 +262,3 @@ else:
                 st.success("✅ Added new student report.")
 
             save_data(df)
-
-    st.markdown('</div>', unsafe_allow_html=True)
