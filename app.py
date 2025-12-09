@@ -119,73 +119,26 @@ if mode == "Parent":
 
     st.subheader("🔎 Search for your child")
 
+    # --- centered icon above the search box ---
+    ic1, ic2, ic3 = st.columns([1, 1, 1])
+    with ic2:
+        st.markdown(
+            "<div style='text-align:center; font-size:40px;'>🔍</div>",
+            unsafe_allow_html=True,
+        )
+
+    # --- full-width text box ---
     student_id = st.text_input(
         "Enter Student ID / أدخل رقم الطالب",
         placeholder="e.g., 20230045",
     )
 
-    # ------------ Centered Search Icon + Input + Button ------------
-st.markdown(
-    """
-    <div style="text-align:center; margin-top:10px;">
-        <span style="font-size:45px;">🔍</span>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+    # --- centered Search button ---
+    b1, b2, b3 = st.columns([1, 1, 1])
+    with b2:
+        search_clicked = st.button("🔍 Search / بحث", use_container_width=True)
 
-# Centering the text input using container width control
-student_id = st.text_input(
-    "",
-    placeholder="Enter Student ID / أدخل رقم الطالب",
-    label_visibility="collapsed",
-)
-
-# Center the Search button
-center_button = """
-<div style="text-align:center; margin-top:15px;">
-    <button style="
-        background-color:#FF5C5C;
-        color:white;
-        border:none;
-        padding:10px 28px;
-        font-size:17px;
-        border-radius:10px;
-        cursor:pointer;">
-        🔍 Search / بحث
-    </button>
-</div>
-"""
-
-# Render the button visually
-btn = st.markdown(center_button, unsafe_allow_html=True)
-
-# Invisible Streamlit button to trigger functionality
-clicked = st.button("Trigger_Search", key="real_button", help="", args=None)
-
-# Make the fancy HTML button trigger the real button using JS
-st.markdown(
-    """
-    <script>
-    const htmlBtn = window.parent.document.querySelector('button[style]');
-    htmlBtn.addEventListener('click', function() {
-        const realBtn = window.parent.document.querySelector('button[kind="secondary"]');
-        realBtn.click();
-    });
-    </script>
-    """,
-    unsafe_allow_html=True
-)
-
-# Process search
-if clicked:
-    sid = student_id.strip()
-    if not sid:
-        st.warning("Please enter a Student ID.")
-    else:
-        match = df[df["Student_ID"].astype(str) == sid]
-        ...
-
+    if search_clicked:
         sid = student_id.strip()
         if not sid:
             st.warning("Please enter a Student ID.")
@@ -195,6 +148,54 @@ if clicked:
                 st.error("No report found for this Student ID.")
             else:
                 row = match.iloc[0]
+
+                st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
+                st.markdown("### 🎓 Student information")
+
+                col1, col2 = st.columns([2, 1])
+                with col1:
+                    st.write(f"**Name:** {row['Student_Name']}")
+                    st.write(f"**ID:** {row['Student_ID']}")
+                with col2:
+                    st.write(f"**Class:** {row['Class']}")
+                    st.write(f"**Term:** {row['Term']}")
+
+                st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
+                st.markdown("### 📚 Subjects & teacher notes")
+
+                def subject_block(label, emoji, mcol, ccol):
+                    mark = row.get(mcol, "")
+                    comm = row.get(ccol, "")
+                    st.markdown(
+                        f"<div class='subject-chip'>{emoji} {label}</div>",
+                        unsafe_allow_html=True,
+                    )
+                    st.write(f"**Mark:** {mark}")
+                    st.markdown(
+                        f"<div class='comment-label'>Teacher comment:</div>",
+                        unsafe_allow_html=True,
+                    )
+                    st.write(comm if comm else "*No comment*")
+                    st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
+
+                subject_block("Arabic / العربية", "🕌", "Arabic", "Arabic_Comment")
+                subject_block("English / الإنجليزية", "📖", "English", "English_Comment")
+                subject_block("Math / الرياضيات", "🧮", "Math", "Math_Comment")
+                subject_block("Science / العلوم", "🧪", "Science", "Science_Comment")
+                subject_block("Islamic / التربية الإسلامية", "☪️", "Islamic", "Islamic_Comment")
+                subject_block("Social Studies / الدراسات الاجتماعية", "🌍",
+                               "Social_Studies", "Social_Studies_Comment")
+
+                st.markdown("### 💡 Overall teacher comment")
+                st.write(row.get("Overall_Comment", ""))
+
+                csv = match.to_csv(index=False).encode("utf-8")
+                st.download_button(
+                    "⬇️ Download this report (CSV)",
+                    csv,
+                    file_name=f"report_{row['Student_ID']}.csv",
+                    mime="text/csv",
+                )
 
 # ======================================================================
 #                               TEACHER VIEW
