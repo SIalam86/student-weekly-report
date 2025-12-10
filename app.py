@@ -35,11 +35,6 @@ st.set_page_config(
 )
 st.markdown("""
 <style>
-
- /* ===== Fix top spacing (balanced, clean header area) ===== */
-section.main > div:first-child {
-    padding-top: 3rem !important;   /* Adjust this value (2–5rem) */
-}
 /* Reduce space between emoji and main title */
 h1 {
     margin-top: -0.5rem !important;
