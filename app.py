@@ -36,9 +36,9 @@ st.set_page_config(
 st.markdown("""
 <style>
 
- /* ===== Fix top empty space ===== */
+ /* ===== Fix top spacing (balanced, clean header area) ===== */
 section.main > div:first-child {
-    padding-top: 1rem !important;   /* reduce huge top space */
+    padding-top: 3rem !important;   /* Adjust this value (2–5rem) */
 }
 
 /* ===== Make all headings and emoji headers visible ===== */
