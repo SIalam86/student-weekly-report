@@ -34,6 +34,17 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+st.markdown("""
+<style>
+/* Change all input labels to dark text */
+.stTextInput label {
+    color: #333 !important;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 PRIMARY = "#00732F"   # UAE green
 ACCENT = "#CE1126"    # UAE red
 GOLD   = "#F4B400"    # playful gold
