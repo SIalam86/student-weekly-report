@@ -40,6 +40,10 @@ st.markdown("""
 section.main > div:first-child {
     padding-top: 3rem !important;   /* Adjust this value (2–5rem) */
 }
+/* Reduce space between emoji and main title */
+h1 {
+    margin-top: -0.5rem !important;
+}
 
 /* ===== Make all headings and emoji headers visible ===== */
 h1, h2, h3, h4, h5, h6, .stMarkdown {
