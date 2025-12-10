@@ -37,6 +37,107 @@ st.set_page_config(
 # ===== MAIN STYLE BLOCK =====
 st.markdown("""
 <style>
+
+/* ---------- Top spacing (keep screen tight, no big empty band) ---------- */
+section.main > div:first-child {
+    padding-top: 0.6rem !important;
+}
+
+/* ---------- General headings ---------- */
+h1 {
+    color: #00692F !important;
+    font-weight: 800 !important;
+}
+h2, h3, h4, h5, h6 {
+    color: #222222 !important;
+}
+
+/* ---------- Big emoji header ---------- */
+.big-header-emoji {
+    text-align: center;
+    font-size: 64px;
+    margin-top: 0.1rem;
+    margin-bottom: 0.2rem;
+}
+
+/* ---------- Make side-bar text visible ---------- */
+[data-testid="stSidebar"] {
+    background-color: #111827 !important;  /* nice dark background */
+}
+[data-testid="stSidebar"] * {
+    color: #FFFFFF !important;             /* all sidebar text white */
+}
+
+/* ---------- Labels (Student ID, Arabic comment, etc.) ---------- */
+.stTextInput label,
+.stTextArea label,
+.stNumberInput label {
+    color: #222222 !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+}
+
+/* ---------- Text inputs (white boxes) ---------- */
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border-radius: 10px !important;
+    border: 1px solid #CCCCCC !important;
+    padding: 10px !important;
+    font-size: 16px !important;
+}
+
+/* Hide the +/- spin buttons on number inputs */
+.stNumberInput input::-webkit-outer-spin-button,
+.stNumberInput input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.stNumberInput input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* ---------- Textareas (comments) ---------- */
+.stTextArea textarea {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border-radius: 10px !important;
+    border: 1px solid #CCCCCC !important;
+    padding: 12px !important;
+    font-size: 16px !important;
+}
+
+/* ---------- Buttons (Search + Save) ---------- */
+div.stButton > button {
+    background-color: #FF5C5C !important;   /* red */
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 0.6rem 2rem !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+}
+div.stButton > button:hover {
+    background-color: #E14A4A !important;
+}
+div.stButton > button:active {
+    background-color: #C63F3F !important;
+    transform: translateY(1px);
+}
+
+/* ---------- Generic markdown text so section titles (with emojis) are visible ---------- */
+.stMarkdown p, .stMarkdown span {
+    color: #222222 !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+#st.markdown("""
+<style>
 /* --- reduce top padding so content starts higher --- */
 .block-container {
     padding-top: 0.5rem !important;   /* was Streamlit default (~5–6rem) */
@@ -145,7 +246,6 @@ h2, h3, h4, h5, h6 {
 
 /* ---------- App background + chips ---------- */
 </style>
-""", unsafe_allow_html=True)
 
 # Extra label tuning (you already had this, kept but simplified)
 st.markdown("""
