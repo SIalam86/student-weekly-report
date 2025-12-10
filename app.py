@@ -1,67 +1,100 @@
+# app.py
 import streamlit as st
 import pandas as pd
 from pathlib import Path
 
-# ----------------- Data helpers -----------------
-DATA_FILE = Path("marks.xlsx")
-
-def load_data():
-    if DATA_FILE.exists():
-        return pd.read_excel(DATA_FILE)
-    else:
-        cols = [
-            "Student_ID", "Student_Name", "Class", "Term",
-            "Arabic", "Arabic_Comment",
-            "English", "English_Comment",
-            "Math", "Math_Comment",
-            "Science", "Science_Comment",
-            "Islamic", "Islamic_Comment",
-            "Social_Studies", "Social_Studies_Comment",
-            "Overall_Comment",
-        ]
-        df = pd.DataFrame(columns=cols)
-        df.to_excel(DATA_FILE, index=False)
-        return df
-
-def save_data(df: pd.DataFrame):
-    df.to_excel(DATA_FILE, index=False)
-
-# ----------------- Page config & styles -----------------
+# =========================================================
+#                   BASIC SETTINGS
+# =========================================================
 st.set_page_config(
     page_title="Student Weekly Report",
-    page_icon="📚",
-    layout="centered",
-    initial_sidebar_state="expanded",
+    page_icon="📄",
+    layout="wide",
 )
-st.markdown("""
+
+DATA_FILE = Path("student_weekly_reports.csv")
+
+# ---------------------------------------------------------
+#               DATA LOAD / SAVE HELPERS
+# ---------------------------------------------------------
+COLUMNS = [
+    "Student_ID",
+    "Student_Name",
+    "Class",
+    "Term",
+    "Arabic",
+    "Arabic_Comment",
+    "English",
+    "English_Comment",
+    "Math",
+    "Math_Comment",
+    "Science",
+    "Science_Comment",
+    "Islamic",
+    "Islamic_Comment",
+    "Social_Studies",
+    "Social_Studies_Comment",
+    "Overall_Comment",
+]
+
+
+def load_data() -> pd.DataFrame:
+    if DATA_FILE.exists():
+        df = pd.read_csv(DATA_FILE, dtype=str)
+    else:
+        df = pd.DataFrame(columns=COLUMNS)
+    # ensure all columns exist
+    for col in COLUMNS:
+        if col not in df.columns:
+            df[col] = ""
+    return df
+
+
+def save_data(df: pd.DataFrame):
+    df.to_csv(DATA_FILE, index=False)
+
+
+df = load_data()
+
+# =========================================================
+#                       GLOBAL CSS
+# =========================================================
+st.markdown(
+    """
 <style>
-/* Reduce space between emoji and main title */
+
+/* ---------- Top spacing for main content ---------- */
+section.main > div:first-child {
+    padding-top: 3.5rem !important;
+}
+
+/* ---------- Big emoji header ---------- */
+.big-header-emoji {
+    text-align: center;
+    font-size: 64px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+
+/* ---------- Headings ---------- */
 h1 {
-    margin-top: -0.5rem !important;
+    color: #00692F !important;   /* UAE green */
+    font-weight: 800 !important;
 }
-
-/* ===== Make all headings and emoji headers visible ===== */
-h1, h2, h3, h4, h5, h6, .stMarkdown {
+h2, h3, h4, h5, h6 {
     color: #222222 !important;
 }
 
-/* Fix titles like "Teacher entry form" where text disappears */
-.stMarkdown p, .stMarkdown span {
-    color: #222222 !important;
-    font-size: 20px !important;
+/* ---------- Sidebar text on dark background ---------- */
+[data-testid="stSidebar"] * {
+    color: #F5F5F5 !important;
+    font-size: 16px;
+}
+[data-testid="stSidebar"] label {
     font-weight: 600 !important;
 }
 
-/* ===== Fix labels: Student ID, Arabic comment, English comment ===== */
-.stTextInput label,
-.stTextArea label,
-.stNumberInput label {
-    color: #222222 !important;
-    font-size: 17px !important;
-    font-weight: 600 !important;
-}
-
-/* ===== Input fields (white boxes) ===== */
+/* ---------- Input / textarea styling ---------- */
 .stTextInput > div > div > input,
 .stNumberInput > div > div > input {
     background-color: #FFFFFF !important;
@@ -81,234 +114,179 @@ h1, h2, h3, h4, h5, h6, .stMarkdown {
     font-size: 16px !important;
 }
 
-/* ===== Buttons (Search, Save, Update) stay red, not black ===== */
+/* ---------- Input labels ---------- */
+.stTextInput label,
+.stTextArea label,
+.stNumberInput label {
+    color: #222222 !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+}
+
+/* ---------- Buttons (Search, Save) ---------- */
 .stButton > button {
     background-color: #FF5C5C !important;
     color: #FFFFFF !important;
     border: none !important;
     border-radius: 999px !important;
-    padding: 0.6rem 2rem !important;
+    padding: 0.6rem 2.3rem !important;
     font-size: 17px !important;
     font-weight: 600 !important;
+    cursor: pointer !important;
 }
 
 .stButton > button:hover {
     background-color: #E14A4A !important;
+    color: #FFFFFF !important;
 }
 
 .stButton > button:active {
     background-color: #C63F3F !important;
+    color: #FFFFFF !important;
     transform: translateY(1px);
 }
 
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-/* Change all input labels to dark text */
-.stTextInput label {
-    color: #333 !important;
-    font-size: 18px !important;
-    font-weight: 500 !important;
+.stButton > button:focus:not(:active) {
+    box-shadow: 0 0 0 0.12rem rgba(255, 92, 92, 0.35) !important;
+    outline: none !important;
 }
+
 </style>
-""", unsafe_allow_html=True)
-
-PRIMARY = "#00732F"   # UAE green
-ACCENT = "#CE1126"    # UAE red
-GOLD   = "#F4B400"    # playful gold
-SOFT_BG = "#F8F9FB"
-
-# Global, safe CSS (no position/z-index hacks)
-st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background: radial-gradient(circle at top, #FFFFFF 0, {SOFT_BG} 55%, #ECEFF4 100%);
-        font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    }}
-    .main-title {{
-        font-size: 34px;
-        font-weight: 800;
-        color: {PRIMARY};
-        text-align: center;
-        margin-bottom: 0.3rem;
-    }}
-    .sub-title {{
-        font-size: 34px;
-        font-weight: 800;
-        color: {ACCENT};
-        text-align: center;
-        margin-bottom: 0.3rem;
-    }}
-    .subject-chip {{
-        display:inline-block;
-        padding:0.15rem 0.7rem;
-        border-radius:999px;
-        background:{PRIMARY};
-        color:white;
-        font-size:0.85rem;
-        font-weight:600;
-        margin-bottom:0.3rem;
-    }}
-    .comment-label {{
-        color:#777;
-        font-size:0.82rem;
-        margin-top:0.15rem;
-    }}
-    .divider-soft {{
-        height:1px;
-        background:linear-gradient(to right, transparent, #D0D7E2, transparent);
-        margin:0.6rem 0 0.8rem 0;
-    }}
-    /* Make all text inputs white with rounded corners */
-    .stTextInput > div > div > input {{
-        background-color: #FFFFFF !important;
-        color: #000000 !important;
-        border: 1px solid #CCCCCC !important;
-        border-radius: 10px !important;
-        padding: 8px 10px !important;
-    }}
-    </style>
-    """,
+""",
     unsafe_allow_html=True,
 )
 
-# ----------------- Header -----------------
-st.markdown(
-    """
-    <div style='text-align:center; padding-top:10px;'>
-        <span style="font-size:40px;">📑💯📑</span>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+# =========================================================
+#                     HEADER COMPONENT
+# =========================================================
+def render_header():
+    # Big emoji line
+    st.markdown('<div class="big-header-emoji">📄 💯 📄</div>', unsafe_allow_html=True)
 
-# Removed “AE” here
-st.markdown('<div class="main-title">Student Weekly Report</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">تقرير أسبوعي ملون للطالب</div>', unsafe_allow_html=True)
-
-# ----------------- Side bar mode switch -----------------
-mode = st.sidebar.radio("Who is using the app?", ["Parent", "Teacher"])
-df = load_data()
-
-# ======================================================================
-#                               PARENT VIEW
-# ======================================================================
-if mode == "Parent":
-    st.sidebar.markdown("### 👨‍👩‍👧 Parent view")
-    st.sidebar.write("Enter your child’s ID to view the report.")
-
+    # Main title + Arabic subtitle
     st.markdown(
-    """
-    <div style="text-align:center; font-size:15px; margin-top:10px;">
-        <p style="margin:4px 0; color:#444;">
+        """
+    <h1 style="text-align:center;">Student Weekly Report</h1>
+    <h2 style="text-align:center; color:#C8102E; margin-top:0.4rem;">
+        تقرير أسبوعي ملون للطالب
+    </h2>
+    """,
+        unsafe_allow_html=True,
+    )
+
+
+# =========================================================
+#                     PARENT VIEW
+# =========================================================
+def parent_view(df: pd.DataFrame):
+    render_header()
+
+    # Instructions
+    st.markdown(
+        """
+    <div style="text-align:center; font-size:20px; margin-top:1rem;">
+        <p style="margin:4px 0;">
             Enter your child's student ID below to search for their report
         </p>
-        <p style="margin:4px 0; direction:rtl; color:#444;">
+        <p style="margin:4px 0; direction:rtl;">
             أدخل رقم الطالب الخاص بطفلك أدناه للبحث عن تقريره
         </p>
     </div>
     """,
-    unsafe_allow_html=True,
-)
-
-    # --- centered icon above the search box ---
-    ic1, ic2, ic3 = st.columns([1, 1, 1])
-    with ic2:
-        st.markdown(
-            "<div style='text-align:center; font-size:45px; margin-bottom:10px;'>🔍</div>",
-            unsafe_allow_html=True,
-        )
-
-
-    # --- full-width text box ---
-    student_id = st.text_input(
-        "Enter Student ID / أدخل رقم الطالب",
-        placeholder="e.g., 20230045",
+        unsafe_allow_html=True,
     )
 
-    # --- centered Search button ---
-    b1, b2, b3 = st.columns([1, 1, 1])
-    with b2:
-        search_clicked = st.button("🔍 Search / بحث", use_container_width=True)
+    # Search input + button
+    st.write("")  # small spacer
+    student_id = st.text_input("Enter Student ID / أدخل رقم الطالب", key="parent_search_id")
+    col_center = st.columns([1, 1, 1])[1]
+    with col_center:
+        search_clicked = st.button("🔍 Search / بحث")
+
+    st.write("")
 
     if search_clicked:
         sid = student_id.strip()
         if not sid:
             st.warning("Please enter a Student ID.")
-        else:
-            match = df[df["Student_ID"].astype(str) == sid]
-            if match.empty:
-                st.error("No report found for this Student ID.")
-            else:
-                row = match.iloc[0]
+            return
 
-                st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
-                st.markdown("### 🎓 Student information")
+        mask = df["Student_ID"].astype(str) == sid
+        if not mask.any():
+            st.error("No report found for this Student ID.")
+            return
 
-                col1, col2 = st.columns([2, 1])
-                with col1:
-                    st.write(f"**Name:** {row['Student_Name']}")
-                    st.write(f"**ID:** {row['Student_ID']}")
-                with col2:
-                    st.write(f"**Class:** {row['Class']}")
-                    st.write(f"**Term:** {row['Term']}")
+        row = df[mask].iloc[0]
 
-                st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
-                st.markdown("### 📚 Subjects & teacher notes")
+        # Simple card-style report
+        st.markdown("---")
+        st.markdown(
+            f"""
+        <div style="padding:1.5rem 2rem; border-radius:16px;
+                    background-color:#ffffff; border:1px solid #e0e0e0;">
+            <h3 style="margin-top:0;">📚 Student report</h3>
+            <p><b>Student ID:</b> {row['Student_ID']}</p>
+            <p><b>Name:</b> {row['Student_Name']}</p>
+            <p><b>Class:</b> {row['Class']}</p>
+            <p><b>Term / Week:</b> {row['Term']}</p>
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
 
-                def subject_block(label, emoji, mcol, ccol):
-                    mark = row.get(mcol, "")
-                    comm = row.get(ccol, "")
-                    st.markdown(
-                        f"<div class='subject-chip'>{emoji} {label}</div>",
-                        unsafe_allow_html=True,
-                    )
-                    st.write(f"**Mark:** {mark}")
-                    st.markdown(
-                        f"<div class='comment-label'>Teacher comment:</div>",
-                        unsafe_allow_html=True,
-                    )
-                    st.write(comm if comm else "*No comment*")
-                    st.markdown('<div class="divider-soft"></div>', unsafe_allow_html=True)
+        def subject_block(title_en, mark, comment):
+            st.markdown(
+                f"""
+            <div style="padding:1rem 1.5rem; border-radius:14px;
+                        background-color:#F7F7F9; margin-top:0.8rem;">
+                <h4 style="margin-top:0;">{title_en}</h4>
+                <p><b>Mark:</b> {mark if mark else '-'}</p>
+                <p><b>Comment:</b> {comment if comment else '-'}</p>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
 
-                subject_block("Arabic / العربية", "🕌", "Arabic", "Arabic_Comment")
-                subject_block("English / الإنجليزية", "📖", "English", "English_Comment")
-                subject_block("Math / الرياضيات", "🧮", "Math", "Math_Comment")
-                subject_block("Science / العلوم", "🧪", "Science", "Science_Comment")
-                subject_block("Islamic / التربية الإسلامية", "☪️", "Islamic", "Islamic_Comment")
-                subject_block("Social Studies / الدراسات الاجتماعية", "🌍",
-                               "Social_Studies", "Social_Studies_Comment")
+        subject_block("🇦🇪 Arabic", row["Arabic"], row["Arabic_Comment"])
+        subject_block("🇬🇧 English", row["English"], row["English_Comment"])
+        subject_block("🧮 Math", row["Math"], row["Math_Comment"])
+        subject_block("🔬 Science", row["Science"], row["Science_Comment"])
+        subject_block("🕌 Islamic", row["Islamic"], row["Islamic_Comment"])
+        subject_block("🌍 Social Studies", row["Social_Studies"], row["Social_Studies_Comment"])
 
-                st.markdown("### 💡 Overall teacher comment")
-                st.write(row.get("Overall_Comment", ""))
+        st.markdown(
+            f"""
+        <div style="padding:1rem 1.5rem; border-radius:14px;
+                    background-color:#FFF9E6; margin-top:0.8rem;">
+            <h4 style="margin-top:0;">📝 Overall teacher comment</h4>
+            <p>{row['Overall_Comment'] if row['Overall_Comment'] else '-'}</p>
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
 
-                csv = match.to_csv(index=False).encode("utf-8")
-                st.download_button(
-                    "⬇️ Download this report (CSV)",
-                    csv,
-                    file_name=f"report_{row['Student_ID']}.csv",
-                    mime="text/csv",
-                )
 
-# ======================================================================
-#                               TEACHER VIEW
-# ======================================================================
-# ======================================================================
-#                               TEACHER VIEW
-# ======================================================================
-else:
-    st.sidebar.markdown("### 👩‍🏫 Teacher view")
-    st.sidebar.write("Add or update a weekly report for a student.")
+# =========================================================
+#                     TEACHER VIEW
+# =========================================================
+def teacher_view(df: pd.DataFrame):
+    render_header()
 
-    st.subheader("✏️ Teacher entry form")
+    # Blue label heading
+    st.markdown(
+        """
+    <div style="display:inline-block; background-color:#1E64E6; color:white;
+                padding:0.4rem 1.2rem; border-radius:4px; font-size:26px;
+                margin-top:1.5rem; margin-bottom:0.5rem;">
+        🖊️ Teacher entry form
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
 
-    # ---- Form ----
+    st.write("")
+
     with st.form("teacher_form", clear_on_submit=False):
-
-        # Basic info
         info_col1, info_col2 = st.columns(2)
         with info_col1:
             student_id = st.text_input("Student ID")
@@ -319,24 +297,23 @@ else:
 
         st.markdown("### 📊 Marks & comments")
 
-        # Subject layout: each subject = mark (left) + comment (right)
         subjects = [
-            ("Arabic",          "🇦🇪 Arabic"),
-            ("English",         "🇬🇧 English"),
-            ("Math",            "🧮 Math"),
-            ("Science",         "🔬 Science"),
-            ("Islamic",         "🕌 Islamic"),
-            ("Social_Studies",  "🌍 Social Studies"),
+            ("Arabic", "🇦🇪 Arabic"),
+            ("English", "🇬🇧 English"),
+            ("Math", "🧮 Math"),
+            ("Science", "🔬 Science"),
+            ("Islamic", "🕌 Islamic"),
+            ("Social_Studies", "🌍 Social Studies"),
         ]
 
         subject_values = {}
 
         for col_name, label in subjects:
             st.markdown(f"#### {label}")
-
             c_mark, c_comment = st.columns([1, 3])
 
             with c_mark:
+                # use float to allow empty (NaN); will convert to text later
                 mark = st.number_input(
                     "Mark",
                     min_value=0,
@@ -351,8 +328,7 @@ else:
                     key=f"{col_name}_comment",
                 )
 
-            # Save into dict using your existing column names
-            subject_values[col_name] = mark
+            subject_values[col_name] = str(mark)
             subject_values[f"{col_name}_Comment"] = comment
 
         st.markdown("### 💡 Overall teacher comment")
@@ -364,28 +340,43 @@ else:
 
         submitted = st.form_submit_button("💾 Save / Update report")
 
-    # ---- Save logic ----
     if submitted:
         sid = student_id.strip()
         if not sid:
             st.error("Student ID is required.")
+            return
+
+        row_data = {
+            "Student_ID": sid,
+            "Student_Name": student_name,
+            "Class": student_class,
+            "Term": term,
+            "Overall_Comment": overall_comment,
+        }
+        row_data.update(subject_values)
+
+        # update or append
+        mask = df["Student_ID"].astype(str) == sid
+        if mask.any():
+            df.loc[mask, list(row_data.keys())] = list(row_data.values())
+            st.success("✅ Updated existing student report.")
         else:
-            row_data = {
-                "Student_ID": sid,
-                "Student_Name": student_name,
-                "Class": student_class,
-                "Term": term,
-                "Overall_Comment": overall_comment,
-            }
-            row_data.update(subject_values)
+            df = pd.concat([df, pd.DataFrame([row_data])], ignore_index=True)
+            st.success("✅ Added new student report.")
 
-            # Update or append to df
-            mask = df["Student_ID"].astype(str) == sid
-            if mask.any():
-                df.loc[mask, list(row_data.keys())] = list(row_data.values())
-                st.success("✅ Updated existing student report.")
-            else:
-                df = pd.concat([df, pd.DataFrame([row_data])], ignore_index=True)
-                st.success("✅ Added new student report.")
+        save_data(df)
 
-            save_data(df)
+
+# =========================================================
+#                     SIDEBAR + ROUTING
+# =========================================================
+role = st.sidebar.radio("Who is using the app?", ["Parent", "Teacher"])
+
+if role == "Parent":
+    st.sidebar.markdown("### 👨‍👩‍👧 Parent view")
+    st.sidebar.write("Enter a student ID to view the weekly report.")
+    parent_view(df)
+else:
+    st.sidebar.markdown("### 🧑‍🏫 Teacher view")
+    st.sidebar.write("Add or update a weekly report for a student.")
+    teacher_view(df)
