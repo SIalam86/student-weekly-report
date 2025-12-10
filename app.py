@@ -96,7 +96,7 @@ st.markdown(
 st.markdown(
     """
     <div style='text-align:center; padding-top:10px;'>
-        <span style="font-size:40px;">📘</span>
+        <span style="font-size:40px;">A+📑💯📑</span>
     </div>
     """,
     unsafe_allow_html=True,
