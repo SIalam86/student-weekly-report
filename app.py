@@ -37,11 +37,30 @@ st.set_page_config(
 # ===== MAIN STYLE BLOCK =====
 st.markdown("""
 <style>
-
-/* ---------- Top spacing (reduced a bit) ---------- */
-section.main > div:first-child {
-    padding-top: 1.5 rem !important;
+/* --- reduce top padding so content starts higher --- */
+.block-container {
+    padding-top: 0.5rem !important;   /* was Streamlit default (~5–6rem) */
+    padding-bottom: 1.5rem !important;
 }
+
+/* Keep headers nice but not huge gaps */
+.big-header-emoji {
+    text-align: center;
+    font-size: 64px;
+    margin-top: 0.2rem;          /* smaller than before */
+    margin-bottom: 0.3rem;
+}
+.main-title {
+    margin-top: 0.1rem;
+    margin-bottom: 0.15rem;
+}
+.sub-title {
+    margin-top: 0.1rem;
+    margin-bottom: 0.35rem;
+}
+/* (keep all your other styles: labels, inputs, buttons… ) */
+
+
 
 /* ---------- Headings ---------- */
 h1 {
