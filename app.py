@@ -178,7 +178,7 @@ st.markdown(
 # ----------------- Header -----------------
 st.markdown(
     """
-    <div style='text-align:center; padding-top:5px;'>
+    <div style='text-align:center; padding-top:10px;'>
         <span style="font-size:40px;">📑💯📑</span>
     </div>
     """,
