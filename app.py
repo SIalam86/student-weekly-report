@@ -55,9 +55,11 @@ st.markdown(
         margin-bottom: 0.3rem;
     }}
     .sub-title {{
-        text-align:center;
-        color:#555;
-        margin-bottom:1.2rem;
+        font-size: 34px;
+        font-weight: 800;
+        color: {PRIMARY};
+        text-align: center;
+        margin-bottom: 0.3rem;
     }}
     .subject-chip {{
         display:inline-block;
