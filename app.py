@@ -119,7 +119,7 @@ if mode == "Parent":
 
     st.markdown("""
         <div style="text-align:center; font-size:22px; margin-top:-40px;">
-        <span style="color:#444;">Search for your child</span>
+        <span style="color:#444;">Enter your child's student id below to search for their report</span>
         </div>
         """, unsafe_allow_html=True)
 
