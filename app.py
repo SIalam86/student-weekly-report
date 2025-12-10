@@ -143,11 +143,10 @@ if mode == "Parent":
 
 
     # --- full-width text box ---
-    student_id = st.text_input("""
-        <p style="margin:4px 0; direction:rtl; color:#444;"> "Enter Student ID / أدخل رقم الطالب",
+    student_id = st.text_input(
+        "Enter Student ID / أدخل رقم الطالب",
         placeholder="e.g., 20230045",
-        </p>
-    """)
+    )
 
     # --- centered Search button ---
     b1, b2, b3 = st.columns([1, 1, 1])
