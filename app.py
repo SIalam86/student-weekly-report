@@ -371,12 +371,12 @@ else:
 
         # Subject layout: each subject = mark (left) + comment (right)
         subjects = [
-            ("Arabic",          "🇦🇪 Arabic"),
-            ("English",         "🇬🇧 English"),
-            ("Math",            "🧮 Math"),
-            ("Science",         "🔬 Science"),
-            ("Islamic",         "🕌 Islamic"),
-            ("Social_Studies",  "🌍 Social Studies"),
+            ("Arabic",          "اللغة العربية 📖 Arabic"),
+            ("English",         "اللغة الإنجليزية 📓 English"),
+            ("Math",            "رياضيات 🧮 Math"),
+            ("Science",         "علوم 🔬 Science"),
+            ("Islamic",         "التربية الاسلامية 🕌 Islamic"),
+            ("Social_Studies",  "الدراسات الاجتماعية 🌍 Social Studies"),
         ]
 
         subject_values = {}
