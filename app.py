@@ -117,7 +117,7 @@ if mode == "Parent":
     st.sidebar.markdown("### 👨‍👩‍👧 Parent view")
     st.sidebar.write("Enter your child’s ID to view the report.")
 
-    st.subheader("🔎 Search for your child")
+    st.subheader("Search for your child")
 
     # --- centered icon above the search box ---
     ic1, ic2, ic3 = st.columns([1, 1, 1])
