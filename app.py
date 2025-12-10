@@ -33,6 +33,76 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="expanded",
 )
+PRIMARY_RED = "#FF5C5C"   # button colour
+PRIMARY_RED_DARK = "#E14A4A"
+
+st.markdown(f"""
+<style>
+
+/* ====== Inputs & labels ====== */
+
+/* Text inputs (Student ID, name, etc.) */
+.stTextInput > div > div > input {{
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border-radius: 10px !important;
+    border: 1px solid #CCCCCC !important;
+    padding: 8px 10px !important;
+    font-size: 16px !important;
+}}
+
+/* Text areas (comments) */
+.stTextArea textarea {{
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border-radius: 10px !important;
+    border: 1px solid #CCCCCC !important;
+    padding: 10px 12px !important;
+    font-size: 16px !important;
+}}
+
+/* Labels for all inputs */
+.stTextInput label,
+.stTextArea label,
+.stNumberInput label {{
+    color: #222222 !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+}}
+
+/* ====== Buttons (Search, Save, etc.) ====== */
+
+.stButton > button {{
+    background-color: {PRIMARY_RED} !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 0.6rem 2.2rem !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}}
+
+/* Hover & active state – keep colour, no invert */
+.stButton > button:hover {{
+    background-color: {PRIMARY_RED_DARK} !important;
+    color: #FFFFFF !important;
+}}
+
+.stButton > button:active {{
+    background-color: {PRIMARY_RED_DARK} !important;
+    color: #FFFFFF !important;
+    transform: translateY(1px);
+}}
+
+/* Optional: little glow when focused */
+.stButton > button:focus:not(:active) {{
+    box-shadow: 0 0 0 0.12rem rgba(255,92,92,0.35) !important;
+    outline: none !important;
+}}
+
+</style>
+""", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -226,44 +296,75 @@ if mode == "Parent":
 # ======================================================================
 #                               TEACHER VIEW
 # ======================================================================
+# ======================================================================
+#                               TEACHER VIEW
+# ======================================================================
 else:
     st.sidebar.markdown("### 👩‍🏫 Teacher view")
-    st.sidebar.write("Add or update a weekly report.")
+    st.sidebar.write("Add or update a weekly report for a student.")
 
     st.subheader("✏️ Teacher entry form")
 
+    # ---- Form ----
     with st.form("teacher_form", clear_on_submit=False):
-        col1, col2 = st.columns(2)
-        with col1:
+
+        # Basic info
+        info_col1, info_col2 = st.columns(2)
+        with info_col1:
             student_id = st.text_input("Student ID")
             student_name = st.text_input("Student name")
-        with col2:
+        with info_col2:
             student_class = st.text_input("Class")
             term = st.text_input("Term (e.g. T1 Week 3)")
 
-        st.markdown("#### 📊 Marks")
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            arabic  = st.text_input("Arabic")
-            math    = st.text_input("Math")
-        with c2:
-            english = st.text_input("English")
-            science = st.text_input("Science")
-        with c3:
-            islamic = st.text_input("Islamic")
-            social  = st.text_input("Social Studies")
+        st.markdown("### 📊 Marks & comments")
 
-        st.markdown("#### 💬 Comments")
-        arabic_c  = st.text_area("Arabic comment")
-        english_c = st.text_area("English comment")
-        math_c    = st.text_area("Math comment")
-        science_c = st.text_area("Science comment")
-        islamic_c = st.text_area("Islamic comment")
-        social_c  = st.text_area("Social Studies comment")
-        overall_c = st.text_area("Overall comment")
+        # Subject layout: each subject = mark (left) + comment (right)
+        subjects = [
+            ("Arabic",          "🇦🇪 Arabic"),
+            ("English",         "🇬🇧 English"),
+            ("Math",            "🧮 Math"),
+            ("Science",         "🔬 Science"),
+            ("Islamic",         "🕌 Islamic"),
+            ("Social_Studies",  "🌍 Social Studies"),
+        ]
+
+        subject_values = {}
+
+        for col_name, label in subjects:
+            st.markdown(f"#### {label}")
+
+            c_mark, c_comment = st.columns([1, 3])
+
+            with c_mark:
+                mark = st.number_input(
+                    "Mark",
+                    min_value=0,
+                    max_value=100,
+                    step=1,
+                    key=f"{col_name}_mark",
+                )
+            with c_comment:
+                comment = st.text_area(
+                    "Comment",
+                    height=110,
+                    key=f"{col_name}_comment",
+                )
+
+            # Save into dict using your existing column names
+            subject_values[col_name] = mark
+            subject_values[f"{col_name}_Comment"] = comment
+
+        st.markdown("### 💡 Overall teacher comment")
+        overall_comment = st.text_area(
+            "Overall comment for this week",
+            height=130,
+            key="overall_comment",
+        )
 
         submitted = st.form_submit_button("💾 Save / Update report")
 
+    # ---- Save logic ----
     if submitted:
         sid = student_id.strip()
         if not sid:
@@ -274,21 +375,11 @@ else:
                 "Student_Name": student_name,
                 "Class": student_class,
                 "Term": term,
-                "Arabic": arabic,
-                "Arabic_Comment": arabic_c,
-                "English": english,
-                "English_Comment": english_c,
-                "Math": math,
-                "Math_Comment": math_c,
-                "Science": science,
-                "Science_Comment": science_c,
-                "Islamic": islamic,
-                "Islamic_Comment": islamic_c,
-                "Social_Studies": social,
-                "Social_Studies_Comment": social_c,
-                "Overall_Comment": overall_c,
+                "Overall_Comment": overall_comment,
             }
+            row_data.update(subject_values)
 
+            # Update or append to df
             mask = df["Student_ID"].astype(str) == sid
             if mask.any():
                 df.loc[mask, list(row_data.keys())] = list(row_data.values())
