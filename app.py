@@ -388,7 +388,7 @@ else:
 
             with c_mark:
                 mark = st.number_input(
-                    "Mark",
+                    "درجة Mark",
                     min_value=0,
                     max_value=100,
                     step=1,
@@ -396,7 +396,7 @@ else:
                 )
             with c_comment:
                 comment = st.text_area(
-                    "Comment",
+                    "تعليق Comment",
                     height=110,
                     key=f"{col_name}_comment",
                 )
@@ -406,7 +406,7 @@ else:
 
         st.markdown("### تعليق المدرسة 💡 School's comment")
         overall_comment = st.text_area(
-            "School's comment for this week",
+            "تعليق المدرسة لهذا الأسبوع School's comment for this week",
             height=130,
             key="overall_comment",
         )
