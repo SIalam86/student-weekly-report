@@ -122,10 +122,10 @@ if mode == "Parent":
     st.markdown(
     """
     <div style="text-align:center; font-size:22px; margin-top:10px;">
-        <p style="margin:4px 0;">
+        <p style="margin:4px 0; color:#444;">
             Enter your child's student ID below to search for their report
         </p>
-        <p style="margin:4px 0; direction:rtl;">
+        <p style="margin:4px 0; direction:rtl; color:#444;">
             أدخل رقم الطالب الخاص بطفلك أدناه للبحث عن تقريره
         </p>
     </div>
