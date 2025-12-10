@@ -98,7 +98,7 @@ st.markdown(
 st.markdown(
     """
     <div style='text-align:center; padding-top:10px;'>
-        <span style="font-size:40px;">A+📑💯📑</span>
+        <span style="font-size:40px;">📑💯📑</span>
     </div>
     """,
     unsafe_allow_html=True,
@@ -120,7 +120,7 @@ if mode == "Parent":
     st.sidebar.write("Enter your child’s ID to view the report.")
 
     st.markdown("""
-        <div style="text-align:center; font-size:22px; margin-top:-40px;">
+        <div style="text-align:center; font-size:22px; margin-top:-80px;">
         <span style="color:#444;">Enter your child's student id below to search for their report أدخل رقم الطالب الخاص بطفلك أدناه للبحث عن تقريره</span>
         </div>
         """, unsafe_allow_html=True)
