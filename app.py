@@ -57,7 +57,7 @@ st.markdown(
     .sub-title {{
         font-size: 34px;
         font-weight: 800;
-        color: {PRIMARY};
+        color: {ACCENT};
         text-align: center;
         margin-bottom: 0.3rem;
     }}
