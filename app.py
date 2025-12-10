@@ -35,8 +35,6 @@ st.set_page_config(
 )
 st.markdown("""
 <style>
-st.markdown("""
-<style>
 
 /* ---------- Top spacing (just right) ---------- */
 section.main > div:first-child {
