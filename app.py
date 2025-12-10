@@ -40,7 +40,7 @@ st.markdown("""
 
 /* ---------- Top spacing (reduced a bit) ---------- */
 section.main > div:first-child {
-    padding-top: 2.5rem !important;
+    padding-top: 1.5 rem !important;
 }
 
 /* ---------- Headings ---------- */
@@ -218,7 +218,7 @@ st.markdown(
 
 # ----------------- Header -----------------
 st.markdown(
-    '<div class="big-header-emoji">📄 💯 📄</div>',
+    '<div class="big-header-emoji">📑💯📑</div>',
     unsafe_allow_html=True
 )
 st.markdown('<div class="main-title">Student Weekly Report</div>', unsafe_allow_html=True)
