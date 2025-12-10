@@ -33,49 +33,41 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="expanded",
 )
+
+# ===== MAIN STYLE BLOCK =====
 st.markdown("""
 <style>
 
-/* ---------- Top spacing (just right) ---------- */
+/* ---------- Top spacing (reduced a bit) ---------- */
 section.main > div:first-child {
-    padding-top: 3.5rem !important;   /* tweak between 3–4.5 if you want */
+    padding-top: 2.5rem !important;
 }
 
-/* ---------- General headings (don’t shrink icons) ---------- */
+/* ---------- Headings ---------- */
 h1 {
-    color: #00692F !important;          /* your green title */
+    color: #00692F !important;          /* UAE green */
     font-weight: 800 !important;
 }
-
 h2, h3, h4, h5, h6 {
     color: #222222 !important;
 }
 
-/* Don't touch every .stMarkdown paragraph anymore
-   so we DON'T shrink your emoji line. */
-
 /* ---------- Big emoji header style ---------- */
 .big-header-emoji {
     text-align: center;
-    font-size: 64px;           /* make it nice and large */
-    margin-top: 0.5rem;
-    margin-bottom: 0.2rem;
+    font-size: 64px;           /* large emojis */
+    margin-top: 0.2rem;
+    margin-bottom: 0.4rem;
 }
 
-/* (keep your input / textarea / button CSS here as before) */
-
-</style>
-""", unsafe_allow_html=True)
-
-
-/* Fix titles like "Teacher entry form" where text disappears */
+/* ---------- General text from st.markdown in main area ---------- */
 .stMarkdown p, .stMarkdown span {
     color: #222222 !important;
     font-size: 20px !important;
     font-weight: 600 !important;
 }
 
-/* ===== Fix labels: Student ID, Arabic comment, English comment ===== */
+/* ---------- Labels for inputs / textareas / number inputs ---------- */
 .stTextInput label,
 .stTextArea label,
 .stNumberInput label {
@@ -84,7 +76,7 @@ h2, h3, h4, h5, h6 {
     font-weight: 600 !important;
 }
 
-/* ===== Input fields (white boxes) ===== */
+/* ---------- Input fields (white rounded boxes) ---------- */
 .stTextInput > div > div > input,
 .stNumberInput > div > div > input {
     background-color: #FFFFFF !important;
@@ -95,6 +87,7 @@ h2, h3, h4, h5, h6 {
     font-size: 16px !important;
 }
 
+/* ---------- Textareas (comments) ---------- */
 .stTextArea textarea {
     background-color: #FFFFFF !important;
     color: #000000 !important;
@@ -104,7 +97,7 @@ h2, h3, h4, h5, h6 {
     font-size: 16px !important;
 }
 
-/* ===== Buttons (Search, Save, Update) stay red, not black ===== */
+/* ---------- Buttons (Search, Save) stay red ---------- */
 .stButton > button {
     background-color: #FF5C5C !important;
     color: #FFFFFF !important;
@@ -114,22 +107,31 @@ h2, h3, h4, h5, h6 {
     font-size: 17px !important;
     font-weight: 600 !important;
 }
-
 .stButton > button:hover {
     background-color: #E14A4A !important;
+    color: #FFFFFF !important;
 }
-
 .stButton > button:active {
     background-color: #C63F3F !important;
+    color: #FFFFFF !important;
     transform: translateY(1px);
 }
+.stButton > button:focus,
+.stButton > button:focus-visible {
+    background-color: #FF5C5C !important;
+    color: #FFFFFF !important;
+    outline: none !important;
+    box-shadow: 0 0 0 0.14rem rgba(255, 92, 92, 0.35) !important;
+}
 
+/* ---------- App background + chips ---------- */
 </style>
 """, unsafe_allow_html=True)
 
+# Extra label tuning (you already had this, kept but simplified)
 st.markdown("""
 <style>
-/* Change all input labels to dark text */
+/* Make all input labels dark and readable */
 .stTextInput label {
     color: #333 !important;
     font-size: 18px !important;
@@ -143,7 +145,7 @@ ACCENT = "#CE1126"    # UAE red
 GOLD   = "#F4B400"    # playful gold
 SOFT_BG = "#F8F9FB"
 
-# Global, safe CSS (no position/z-index hacks)
+# Global, safe CSS (background + chips)
 st.markdown(
     f"""
     <style>
@@ -163,7 +165,7 @@ st.markdown(
         font-weight: 800;
         color: {ACCENT};
         text-align: center;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.8rem;
     }}
     .subject-chip {{
         display:inline-block;
@@ -198,13 +200,27 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# ===== SIDEBAR STYLE (so text is visible on dark background) =====
+st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"] * {
+        color: #F5F5F5 !important;
+    }
+    [data-testid="stSidebar"] .stRadio label {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ----------------- Header -----------------
 st.markdown(
     '<div class="big-header-emoji">📄 💯 📄</div>',
     unsafe_allow_html=True
 )
-
-# Removed “AE” here
 st.markdown('<div class="main-title">Student Weekly Report</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-title">تقرير أسبوعي ملون للطالب</div>', unsafe_allow_html=True)
 
@@ -220,18 +236,18 @@ if mode == "Parent":
     st.sidebar.write("Enter your child’s ID to view the report.")
 
     st.markdown(
-    """
-    <div style="text-align:center; font-size:15px; margin-top:10px;">
-        <p style="margin:4px 0; color:#444;">
-            Enter your child's student ID below to search for their report
-        </p>
-        <p style="margin:4px 0; direction:rtl; color:#444;">
-            أدخل رقم الطالب الخاص بطفلك أدناه للبحث عن تقريره
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+        """
+        <div style="text-align:center; font-size:15px; margin-top:10px;">
+            <p style="margin:4px 0; color:#444;">
+                Enter your child's student ID below to search for their report
+            </p>
+            <p style="margin:4px 0; direction:rtl; color:#444;">
+                أدخل رقم الطالب الخاص بطفلك أدناه للبحث عن تقريره
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # --- centered icon above the search box ---
     ic1, ic2, ic3 = st.columns([1, 1, 1])
@@ -240,7 +256,6 @@ if mode == "Parent":
             "<div style='text-align:center; font-size:45px; margin-bottom:10px;'>🔍</div>",
             unsafe_allow_html=True,
         )
-
 
     # --- full-width text box ---
     student_id = st.text_input(
@@ -315,9 +330,6 @@ if mode == "Parent":
 # ======================================================================
 #                               TEACHER VIEW
 # ======================================================================
-# ======================================================================
-#                               TEACHER VIEW
-# ======================================================================
 else:
     st.sidebar.markdown("### 👩‍🏫 Teacher view")
     st.sidebar.write("Add or update a weekly report for a student.")
@@ -370,7 +382,6 @@ else:
                     key=f"{col_name}_comment",
                 )
 
-            # Save into dict using your existing column names
             subject_values[col_name] = mark
             subject_values[f"{col_name}_Comment"] = comment
 
