@@ -120,7 +120,7 @@ if mode == "Parent":
     st.sidebar.write("Enter your child’s ID to view the report.")
 
     st.markdown("""
-        <div style="text-align:center; font-size:22px; margin-top:-20px;">
+        <div style="text-align:center; font-size:22px; margin-top:-10px;">
         <span style="color:#444;">Enter your child's student id below to search for their report أدخل رقم الطالب الخاص بطفلك أدناه للبحث عن تقريره</span>
         </div>
         """, unsafe_allow_html=True)
