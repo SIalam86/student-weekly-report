@@ -33,73 +33,74 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="expanded",
 )
-PRIMARY_RED = "#FF5C5C"   # button colour
-PRIMARY_RED_DARK = "#E14A4A"
-
-st.markdown(f"""
+st.markdown("""
 <style>
 
-/* ====== Inputs & labels ====== */
+ /* ===== Fix top empty space ===== */
+section.main > div:first-child {
+    padding-top: 1rem !important;   /* reduce huge top space */
+}
 
-/* Text inputs (Student ID, name, etc.) */
-.stTextInput > div > div > input {{
-    background-color: #FFFFFF !important;
-    color: #000000 !important;
-    border-radius: 10px !important;
-    border: 1px solid #CCCCCC !important;
-    padding: 8px 10px !important;
-    font-size: 16px !important;
-}}
+/* ===== Make all headings and emoji headers visible ===== */
+h1, h2, h3, h4, h5, h6, .stMarkdown {
+    color: #222222 !important;
+}
 
-/* Text areas (comments) */
-.stTextArea textarea {{
-    background-color: #FFFFFF !important;
-    color: #000000 !important;
-    border-radius: 10px !important;
-    border: 1px solid #CCCCCC !important;
-    padding: 10px 12px !important;
-    font-size: 16px !important;
-}}
+/* Fix titles like "Teacher entry form" where text disappears */
+.stMarkdown p, .stMarkdown span {
+    color: #222222 !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+}
 
-/* Labels for all inputs */
+/* ===== Fix labels: Student ID, Arabic comment, English comment ===== */
 .stTextInput label,
 .stTextArea label,
-.stNumberInput label {{
+.stNumberInput label {
     color: #222222 !important;
     font-size: 17px !important;
     font-weight: 600 !important;
-}}
+}
 
-/* ====== Buttons (Search, Save, etc.) ====== */
+/* ===== Input fields (white boxes) ===== */
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border-radius: 10px !important;
+    border: 1px solid #CCCCCC !important;
+    padding: 10px !important;
+    font-size: 16px !important;
+}
 
-.stButton > button {{
-    background-color: {PRIMARY_RED} !important;
+.stTextArea textarea {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border-radius: 10px !important;
+    border: 1px solid #CCCCCC !important;
+    padding: 12px !important;
+    font-size: 16px !important;
+}
+
+/* ===== Buttons (Search, Save, Update) stay red, not black ===== */
+.stButton > button {
+    background-color: #FF5C5C !important;
     color: #FFFFFF !important;
     border: none !important;
     border-radius: 999px !important;
-    padding: 0.6rem 2.2rem !important;
-    font-size: 16px !important;
+    padding: 0.6rem 2rem !important;
+    font-size: 17px !important;
     font-weight: 600 !important;
-    cursor: pointer !important;
-}}
+}
 
-/* Hover & active state – keep colour, no invert */
-.stButton > button:hover {{
-    background-color: {PRIMARY_RED_DARK} !important;
-    color: #FFFFFF !important;
-}}
+.stButton > button:hover {
+    background-color: #E14A4A !important;
+}
 
-.stButton > button:active {{
-    background-color: {PRIMARY_RED_DARK} !important;
-    color: #FFFFFF !important;
+.stButton > button:active {
+    background-color: #C63F3F !important;
     transform: translateY(1px);
-}}
-
-/* Optional: little glow when focused */
-.stButton > button:focus:not(:active) {{
-    box-shadow: 0 0 0 0.12rem rgba(255,92,92,0.35) !important;
-    outline: none !important;
-}}
+}
 
 </style>
 """, unsafe_allow_html=True)
