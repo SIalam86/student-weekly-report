@@ -121,7 +121,7 @@ if mode == "Parent":
 
     st.markdown("""
         <div style="text-align:center; font-size:22px; margin-top:-10px;">
-        <span style="color:#444;">Enter your child's student id below to search for their report /nأدخل رقم الطالب الخاص بطفلك أدناه للبحث عن تقريره</span>
+        <span style="color:#444;">Enter your child's student id below to search for their report \nأدخل رقم الطالب الخاص بطفلك أدناه للبحث عن تقريره</span>
         </div>
         """, unsafe_allow_html=True)
 
