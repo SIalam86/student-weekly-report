@@ -251,8 +251,8 @@ df = load_data()
 #                               PARENT VIEW
 # ======================================================================
 if mode == "Parent":
-    st.sidebar.markdown("### 👨‍👩‍👧 Parent view")
-    st.sidebar.write("Enter your child’s ID to view the report.")
+    st.sidebar.markdown("### الوالد 👨‍👩‍👧 Parent")
+    st.sidebar.write("أدخل رقم هوية الطالب الخاص بطفلك لعرض التقرير. Enter your child’s Student ID to view the report.")
 
     st.markdown(
         """
@@ -350,10 +350,10 @@ if mode == "Parent":
 #                               TEACHER VIEW
 # ======================================================================
 else:
-    st.sidebar.markdown("### 👩‍🏫 Teacher view")
-    st.sidebar.write("Add or update a weekly report for a student.")
+    st.sidebar.markdown("### المعلم 👩‍🏫 Teacher")
+    st.sidebar.write("أضف أو حدّث تقريرًا أسبوعيًا لأحد الطلاب. Add or update a weekly report for a student.")
 
-    st.subheader("✏️ Teacher entry form")
+    st.subheader("نموذج تسجيل المعلم ✏️ Teacher entry form")
 
     # ---- Form ----
     with st.form("teacher_form", clear_on_submit=False):
@@ -361,13 +361,13 @@ else:
         # Basic info
         info_col1, info_col2 = st.columns(2)
         with info_col1:
-            student_id = st.text_input("Student ID")
-            student_name = st.text_input("Student name")
+            student_id = st.text_input("رقم الطالب Student ID")
+            student_name = st.text_input("اسم الطالب Student name")
         with info_col2:
-            student_class = st.text_input("Class")
-            term = st.text_input("Term (e.g. T1 Week 3)")
+            student_class = st.text_input("صف Class")
+            term = st.text_input("الفصل الدراسي  Term (e.g. T1 Week 3)")
 
-        st.markdown("### 📊 Marks & comments")
+        st.markdown("### الدرجات والتعليقات 📊 Marks & comments")
 
         # Subject layout: each subject = mark (left) + comment (right)
         subjects = [
@@ -404,14 +404,14 @@ else:
             subject_values[col_name] = mark
             subject_values[f"{col_name}_Comment"] = comment
 
-        st.markdown("### 💡 Overall teacher comment")
+        st.markdown("### تعليق المدرسة 💡 School's comment")
         overall_comment = st.text_area(
-            "Overall comment for this week",
+            "School's comment for this week",
             height=130,
             key="overall_comment",
         )
 
-        submitted = st.form_submit_button("💾 Save / Update report")
+        submitted = st.form_submit_button("حفظ / تحديث التقرير 💾 Save / Update report")
 
     # ---- Save logic ----
     if submitted:
