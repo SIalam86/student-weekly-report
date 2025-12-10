@@ -132,7 +132,7 @@ if mode == "Parent":
 
     st.markdown(
     """
-    <div style="text-align:center; font-size:22px; margin-top:10px;">
+    <div style="text-align:center; font-size:15px; margin-top:10px;">
         <p style="margin:4px 0; color:#444;">
             Enter your child's student ID below to search for their report
         </p>
